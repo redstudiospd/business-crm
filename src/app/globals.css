@@ -1,8 +1,57 @@
 @import "tailwindcss";
 
+html {
+  color-scheme: dark light;
+}
+
 :root {
+  color-scheme: dark;
   --background: #020617;
   --foreground: #e2e8f0;
+  --surface: #111827;
+  --surface-muted: #0f172a;
+  --border: rgba(148, 163, 184, 0.16);
+  --muted: #94a3b8;
+  --accent: #6366f1;
+  --accent-strong: #818cf8;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --surface: #ffffff;
+    --surface-muted: #e2e8f0;
+    --border: rgba(148, 163, 184, 0.24);
+    --muted: #64748b;
+    --accent: #4338ca;
+    --accent-strong: #6366f1;
+  }
+}
+
+html.light {
+  color-scheme: light;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --surface: #ffffff;
+  --surface-muted: #e2e8f0;
+  --border: rgba(148, 163, 184, 0.24);
+  --muted: #64748b;
+  --accent: #4338ca;
+  --accent-strong: #6366f1;
+}
+
+html.dark {
+  color-scheme: dark;
+  --background: #020617;
+  --foreground: #e2e8f0;
+  --surface: #111827;
+  --surface-muted: #0f172a;
+  --border: rgba(148, 163, 184, 0.16);
+  --muted: #94a3b8;
+  --accent: #6366f1;
+  --accent-strong: #818cf8;
 }
 
 @theme inline {
@@ -16,6 +65,13 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }
 
 * {

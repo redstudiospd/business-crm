@@ -71,7 +71,7 @@ export async function seedUserData(userId: string) {
 export async function ensureDemoUser() {
   if (process.env.DEMO_LOGIN !== "true") return;
 
-  const email = "demo@bizcrm.local";
+  const email = "demo@operaops.local";
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) return;
 

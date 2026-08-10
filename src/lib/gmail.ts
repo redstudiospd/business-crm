@@ -9,12 +9,18 @@ function decodeBase64Url(data: string): string {
   return Buffer.from(normalized, "base64").toString("utf-8");
 }
 
-function extractBody(payload: { mimeType?: string; body?: { data?: string }; parts?: unknown[] }): string {
+function extractBody(
+  payload: { mimeType?: string | null; body?: { data?: string | null }; parts?: unknown[] }
+): string {
   if (payload.mimeType === "text/plain" && payload.body?.data) {
     return decodeBase64Url(payload.body.data);
   }
   if (payload.parts) {
-    for (const part of payload.parts as { mimeType?: string; body?: { data?: string }; parts?: unknown[] }[]) {
+    for (const part of payload.parts as {
+      mimeType?: string | null;
+      body?: { data?: string | null };
+      parts?: unknown[];
+    }[]) {
       const text = extractBody(part);
       if (text) return text;
     }
@@ -24,7 +30,9 @@ function extractBody(payload: { mimeType?: string; body?: { data?: string }; par
 }
 
 function getHeader(
-  headers: { name?: string; value?: string }[] | undefined,
+  headers:
+    | { name?: string | null; value?: string | null }[]
+    | undefined,
   name: string
 ): string {
   return headers?.find((h) => h.name?.toLowerCase() === name.toLowerCase())?.value ?? "";
@@ -59,17 +67,19 @@ export async function syncGmailEmails(userId: string, account: Account, accessTo
     const body = extractBody(full.data.payload ?? {}) || full.data.snippet || "";
     const preview = full.data.snippet ?? body.slice(0, 120);
 
+    const receivedAt = dateStr ? new Date(dateStr) : new Date();
     const emailData = {
       from,
       subject,
       preview,
       body,
-      receivedAt: dateStr ? new Date(dateStr) : new Date(),
+      receivedAt,
     };
 
     const category = categorizeEmail({
       id: msg.id,
       ...emailData,
+      receivedAt: receivedAt.toISOString(),
       category: "uncategorized" as EmailCategory,
       read: !full.data.labelIds?.includes("UNREAD"),
     });

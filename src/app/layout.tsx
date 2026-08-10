@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BizCRM — AI-Powered Business CRM",
+  title: "OperaOPS — AI-Driven Business Operations CRM",
   description:
-    "Dashboard analytics, email assistant, calendar, tasks, business insights, and AI chat",
+    "OperaOPS connects business documents, emails, calendar events, and tasks into one AI-powered operations platform.",
 };
 
 export default function RootLayout({

@@ -35,11 +35,13 @@ export async function GET() {
         }),
       ]);
 
-    const financeData = finances.map((f) => ({
-      month: f.month,
-      revenue: f.revenue,
-      expenses: f.expenses,
-    }));
+    const financeData = finances.map(
+      (f: { month: string; revenue: number; expenses: number }) => ({
+        month: f.month,
+        revenue: f.revenue,
+        expenses: f.expenses,
+      })
+    );
 
     const stats = getDashboardSummary(financeData);
     const insights = generateInsights(financeData);
@@ -52,7 +54,9 @@ export async function GET() {
       finances: financeData,
       insights,
       stats,
-      connectedProviders: accounts.map((a) => a.provider),
+      connectedProviders: accounts.map(
+        (a: { provider: string }) => a.provider
+      ),
     });
   } catch {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

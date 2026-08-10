@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { Email as DBEmail } from "@prisma/client";
 import { requireUserId } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { categorizeEmail } from "@/lib/ai";
@@ -7,7 +8,7 @@ import { mapEmail } from "@/lib/mappers";
 export async function POST() {
   try {
     const userId = await requireUserId();
-    const emails = await prisma.email.findMany({ where: { userId } });
+    const emails: DBEmail[] = await prisma.email.findMany({ where: { userId } });
 
     const updated = await Promise.all(
       emails.map(async (email) => {
@@ -30,8 +31,8 @@ export async function POST() {
     );
 
     return NextResponse.json({
-      emails: updated.map(mapEmail),
-      count: updated.filter((e) => e.category !== "uncategorized").length,
+      emails: updated.map((email) => mapEmail(email)),
+      count: updated.filter((e: { category: string }) => e.category !== "uncategorized").length,
     });
   } catch {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

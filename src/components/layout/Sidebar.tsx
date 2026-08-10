@@ -10,6 +10,7 @@ import {
   Lightbulb,
   MessageSquare,
   Sparkles,
+  UploadCloud,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +19,9 @@ const navItems = [
   { href: "/emails", label: "Email Assistant", icon: Mail },
   { href: "/calendar", label: "Calendar", icon: Calendar },
   { href: "/tasks", label: "Task Manager", icon: CheckSquare },
+  { href: "/uploads", label: "File Uploads", icon: UploadCloud },
+  { href: "/(crm)/emails/compose", label: "Compose Mail", icon: Mail },
+  { href: "/(crm)/calendar/create", label: "Schedule Event", icon: Calendar },
   { href: "/insights", label: "Business Insights", icon: Lightbulb },
   { href: "/chat", label: "AI Chat", icon: MessageSquare },
 ];
@@ -32,8 +36,8 @@ export function Sidebar() {
           <Sparkles className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="text-sm font-semibold text-white">BizCRM</h1>
-          <p className="text-xs text-slate-500">AI-Powered Suite</p>
+          <h1 className="text-sm font-semibold text-white">OperaOPS</h1>
+          <p className="text-xs text-slate-500">AI Operations Suite</p>
         </div>
       </div>
 

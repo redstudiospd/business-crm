@@ -1,4 +1,4 @@
-import type { Email, EmailCategory, BusinessInsight } from "./types";
+import type { Email, EmailCategory, BusinessInsight, MonthlyFinance } from "./types";
 import { lossReasons, monthlyFinances } from "./data";
 
 const spamPatterns = [

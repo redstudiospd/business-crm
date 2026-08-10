@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -21,6 +20,7 @@ model User {
   events        CalendarEvent[]
   chatMessages  ChatMessage[]
   finances      MonthlyFinance[]
+  uploads       FileUpload[]
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 }
@@ -123,4 +123,15 @@ model MonthlyFinance {
   user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, month])
+}
+
+model FileUpload {
+  id        String   @id @default(cuid())
+  userId    String
+  filename  String
+  mimeType  String
+  size      Int
+  content   Bytes
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

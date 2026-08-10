@@ -38,17 +38,19 @@ export async function syncOutlookEmails(userId: string, accessToken: string) {
     const from = fromName ? `${fromName} <${fromAddr}>` : fromAddr;
     const body = msg.body?.content?.replace(/<[^>]+>/g, " ").trim() ?? msg.bodyPreview ?? "";
 
+    const receivedAt = msg.receivedDateTime ? new Date(msg.receivedDateTime) : new Date();
     const emailData = {
       from,
       subject: msg.subject ?? "(No subject)",
       preview: msg.bodyPreview ?? body.slice(0, 120),
       body,
-      receivedAt: msg.receivedDateTime ? new Date(msg.receivedDateTime) : new Date(),
+      receivedAt,
     };
 
     const category = categorizeEmail({
       id: msg.id,
       ...emailData,
+      receivedAt: receivedAt.toISOString(),
       category: "uncategorized" as EmailCategory,
       read: msg.isRead ?? false,
     });
