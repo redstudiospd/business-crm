@@ -18,7 +18,9 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+For local development, open http://localhost:3000.
+
+For production deployments, set `NEXTAUTH_URL` (and `AUTH_URL` if used) to your public app URL, e.g. https://app.example.com.
 
 ## Optional: OpenAI Integration
 
