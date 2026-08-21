@@ -24,7 +24,7 @@ For production deployments, set `NEXTAUTH_URL` (and `AUTH_URL` if used) to your 
 
 ## Optional: OpenAI Integration
 
-Set `ANTHROPIC_API_KEY` in `.env.local` to enable GPT-powered chat responses. Without it, the built-in rule-based AI handles all features.
+Set `ANTHROPIC_API_KEY` in `.env.local` to enable Sonnet5-powered chat responses. Without it, the built-in rule-based AI handles all features.
 
 ```env
 ANTHROPIC_API_KEY=sk-...
