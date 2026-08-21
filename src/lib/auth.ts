@@ -102,6 +102,10 @@ if (process.env.DEMO_LOGIN === "true") {
   );
 }
 
+async function seedUserIfNeeded(user: { id?: string | null }) {
+  if (user.id) await seedUserData(user.id);
+}
+
 export const authConfig: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),
   providers,
@@ -121,13 +125,13 @@ export const authConfig: NextAuthConfig = {
       return session;
     },
     signIn: async ({ user }) => {
-      if (user.id) await seedUserData(user.id);
+      await seedUserIfNeeded(user);
       return true;
     },
   },
   events: {
     createUser: async ({ user }) => {
-      if (user.id) await seedUserData(user.id);
+      await seedUserIfNeeded(user);
     },
   },
   trustHost: true,
