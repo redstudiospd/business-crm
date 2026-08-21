@@ -1,4 +1,4 @@
-# BizCRM — AI-Powered Business CRM
+# Aeson.ai — AI-Powered Business CRM
 
 A full-featured CRM with six AI-powered modules for small business owners.
 
@@ -24,10 +24,10 @@ For production deployments, set `NEXTAUTH_URL` (and `AUTH_URL` if used) to your 
 
 ## Optional: OpenAI Integration
 
-Set `OPENAI_API_KEY` in `.env.local` to enable GPT-powered chat responses. Without it, the built-in rule-based AI handles all features.
+Set `ANTHROPIC_API_KEY` in `.env.local` to enable GPT-powered chat responses. Without it, the built-in rule-based AI handles all features.
 
 ```env
-OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-...
 ```
 
 ## Tech Stack
