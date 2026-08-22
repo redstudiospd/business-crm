@@ -15,7 +15,7 @@ export default function LoginPage() {
 
   const handleProviderSignIn = async (id: string) => {
     setStatus(null);
-    await signIn(id, { callbackUrl: "/" });
+    await signIn(id, { callbackUrl: "/dashboard" });
   };
 
   const handleEmailSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -24,7 +24,7 @@ export default function LoginPage() {
     const result = await signIn("email", {
       redirect: false,
       email,
-      callbackUrl: "/",
+      callbackUrl: "/dashboard",
     });
     if (result?.error) {
       setStatus(`Error: ${result.error}`);

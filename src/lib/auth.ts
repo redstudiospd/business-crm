@@ -125,7 +125,6 @@ export const authConfig: NextAuthConfig = {
       return session;
     },
     signIn: async ({ user }) => {
-      await seedUserIfNeeded(user);
       return true;
     },
   },

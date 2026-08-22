@@ -7,23 +7,33 @@ export default function ComposePage() {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [status, setStatus] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setStatus("Saving draft...");
+  const handleAction = async (action: "draft" | "send") => {
+    setLoading(true);
+    setStatus(action === "send" ? "Sending..." : "Saving draft...");
+
     const response = await fetch("/api/compose", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ to, subject, body }),
+      body: JSON.stringify({ to, subject, body, action }),
     });
+
+    const result = await response.json();
+
     if (response.ok) {
-      setStatus("Draft saved successfully.");
+      setStatus(
+        action === "send"
+          ? "Email sent successfully."
+          : "Draft saved to Gmail."
+      );
       setTo("");
       setSubject("");
       setBody("");
     } else {
-      setStatus("Failed to save draft.");
+      setStatus(result.error ?? "Something went wrong.");
     }
+    setLoading(false);
   };
 
   return (
@@ -34,7 +44,10 @@ export default function ComposePage() {
           Draft and send messages as part of your AI-powered business workflows.
         </p>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="space-y-4"
+      >
         <label className="block text-sm text-slate-200">
           To
           <input
@@ -63,12 +76,24 @@ export default function ComposePage() {
             className="mt-2 w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-3 text-slate-100 outline-none focus:border-indigo-500"
           />
         </label>
-        <button
-          type="submit"
-          className="rounded-2xl bg-indigo-500 px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-400"
-        >
-          Save draft
-        </button>
+        <div className="flex gap-3">
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => handleAction("draft")}
+            className="rounded-2xl border border-slate-700 bg-slate-800 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-700 disabled:opacity-50"
+          >
+            Save as draft
+          </button>
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => handleAction("send")}
+            className="rounded-2xl bg-indigo-500 px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-400 disabled:opacity-50"
+          >
+            Send email
+          </button>
+        </div>
       </form>
       {status ? (
         <div className="rounded-2xl bg-slate-800 px-4 py-3 text-sm text-slate-200">

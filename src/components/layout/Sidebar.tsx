@@ -20,8 +20,8 @@ const navItems = [
   { href: "/calendar", label: "Calendar", icon: Calendar },
   { href: "/tasks", label: "Task Manager", icon: CheckSquare },
   { href: "/uploads", label: "File Uploads", icon: UploadCloud },
-  { href: "/(crm)/emails/compose", label: "Compose Mail", icon: Mail },
-  { href: "/(crm)/calendar/create", label: "Schedule Event", icon: Calendar },
+  { href: "/emails/compose", label: "Compose Mail", icon: Mail },
+  { href: "/calendar/create", label: "Schedule Event", icon: Calendar },
   { href: "/insights", label: "Business Insights", icon: Lightbulb },
   { href: "/chat", label: "AI Chat", icon: MessageSquare },
 ];
