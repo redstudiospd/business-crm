@@ -3,9 +3,22 @@ import { requireUserId } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getValidAccessToken } from "@/lib/tokens";
 import { sendGmailMessage, createGmailDraft } from "@/lib/gmail";
+import { isDemoUserEmail } from "@/lib/seed";
 
 export async function POST(request: Request) {
   const userId = await requireUserId();
+  const currentUser = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { email: true },
+  });
+
+  if (currentUser && isDemoUserEmail(currentUser.email)) {
+    return NextResponse.json(
+      { error: "Demo accounts cannot send live Gmail messages." },
+      { status: 403 }
+    );
+  }
+
   const data = await request.json();
   const { to, subject, body, action } = data as {
     to: string;

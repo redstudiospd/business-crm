@@ -21,7 +21,6 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { useCRM, useDashboardStats } from "@/lib/store";
-import { monthlyFinances, lossReasons } from "@/lib/data";
 import { formatCurrency } from "@/lib/utils";
 
 function StatCard({
@@ -69,9 +68,9 @@ function StatCard({
 
 export function DashboardView() {
   const stats = useDashboardStats();
-  const { insights } = useCRM();
+  const { finances, insights } = useCRM();
 
-  const chartData = monthlyFinances.map((m) => ({
+  const chartData = finances.map((m) => ({
     ...m,
     profit: m.revenue - m.expenses,
   }));
@@ -87,18 +86,18 @@ export function DashboardView() {
         </p>
       </div>
 
-      {stats.isCurrentlyLosing && (
+      {stats.isCurrentlyLosing && finances.length > 0 && (
         <div className="flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-4">
           <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-red-400" />
           <div>
             <p className="font-medium text-red-300">Business is losing money this month</p>
             <p className="mt-1 text-sm text-red-400/80">
-              July expenses exceed revenue by{" "}
+              Latest month expenses exceed revenue by{" "}
               {formatCurrency(
-                monthlyFinances[monthlyFinances.length - 1].expenses -
-                  monthlyFinances[monthlyFinances.length - 1].revenue
+                (finances[finances.length - 1]?.expenses ?? 0) -
+                  (finances[finances.length - 1]?.revenue ?? 0)
               )}
-              . Review loss drivers below and check Business Insights for actionable tips.
+              . Review the recommendations below for actionable tips.
             </p>
           </div>
         </div>
@@ -207,26 +206,28 @@ export function DashboardView() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-        <h2 className="text-lg font-semibold text-white">Why You&apos;re Losing Money</h2>
-        <p className="text-sm text-slate-400">AI-identified loss drivers and their impact</p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {lossReasons.map((reason) => (
-            <div
-              key={reason.id}
-              className="rounded-lg border border-slate-800 bg-slate-950 p-4"
-            >
-              <div className="flex items-start justify-between">
-                <h3 className="font-medium text-white">{reason.title}</h3>
-                <span className="text-sm font-semibold text-red-400">
-                  -{formatCurrency(reason.impact)}/mo
-                </span>
+      {topTips.length > 0 && (
+        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+          <h2 className="text-lg font-semibold text-white">Recommended Actions</h2>
+          <p className="text-sm text-slate-400">AI-generated priorities for your current data.</p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {topTips.map((tip) => (
+              <div
+                key={tip.id}
+                className="rounded-lg border border-slate-800 bg-slate-950 p-4"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="font-medium text-white">{tip.title}</h3>
+                  <span className="rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-indigo-300">
+                    {tip.impact}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm text-slate-400">{tip.description}</p>
               </div>
-              <p className="mt-2 text-sm text-slate-400">{reason.description}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

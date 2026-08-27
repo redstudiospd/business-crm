@@ -4,15 +4,11 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
-import {
-  initialEmails,
-  initialEvents,
-  initialTasks,
-} from "./data";
 import {
   categorizeAllEmails,
   generateInsights,
@@ -22,6 +18,7 @@ import type {
   CalendarEvent,
   ChatMessage,
   Email,
+  MonthlyFinance,
   Task,
 } from "./types";
 
@@ -29,6 +26,7 @@ interface CRMContextValue {
   emails: Email[];
   tasks: Task[];
   events: CalendarEvent[];
+  finances: MonthlyFinance[];
   chatMessages: ChatMessage[];
   insights: ReturnType<typeof generateInsights>;
   stats: ReturnType<typeof getDashboardSummary>;
@@ -43,21 +41,73 @@ interface CRMContextValue {
 const CRMContext = createContext<CRMContextValue | null>(null);
 
 export function CRMProvider({ children }: { children: ReactNode }) {
-  const [emails, setEmails] = useState<Email[]>(initialEmails);
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
-  const [events, setEvents] = useState<CalendarEvent[]>(initialEvents);
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
-    {
-      id: "welcome",
-      role: "assistant",
-      content:
-        "Welcome to your Business CRM! I can answer questions about your finances, tasks, emails, and calendar. What would you like to know?",
-      timestamp: new Date().toISOString(),
-    },
-  ]);
+  const [emails, setEmails] = useState<Email[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [finances, setFinances] = useState<MonthlyFinance[]>([]);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [insights, setInsights] = useState<ReturnType<typeof generateInsights>>([]);
+  const [stats, setStats] = useState<ReturnType<typeof getDashboardSummary>>(getDashboardSummary([]));
 
-  const insights = useMemo(() => generateInsights(), []);
-  const stats = useMemo(() => getDashboardSummary(), []);
+  useEffect(() => {
+    let isActive = true;
+
+    async function loadData() {
+      try {
+        const res = await fetch("/api/data", { cache: "no-store" });
+        if (!res.ok) {
+          if (!isActive) return;
+          setEmails([]);
+          setTasks([]);
+          setEvents([]);
+          setFinances([]);
+          setChatMessages([]);
+          setInsights([]);
+          setStats(getDashboardSummary([]));
+          return;
+        }
+
+        const data = await res.json();
+        if (!isActive) return;
+
+        const nextFinances = Array.isArray(data.finances) ? data.finances : [];
+        const nextEmails = Array.isArray(data.emails) ? data.emails : [];
+        const nextTasks = Array.isArray(data.tasks) ? data.tasks : [];
+        const nextEvents = Array.isArray(data.events) ? data.events : [];
+        const nextChatMessages = Array.isArray(data.chatMessages) ? data.chatMessages : [];
+
+        setEmails(nextEmails);
+        setTasks(nextTasks);
+        setEvents(nextEvents);
+        setFinances(nextFinances);
+        setChatMessages(nextChatMessages.length > 0 ? nextChatMessages : [
+          {
+            id: "welcome",
+            role: "assistant",
+            content:
+              "Welcome to your Business CRM! I can answer questions about your finances, tasks, emails, and calendar. What would you like to know?",
+            timestamp: new Date().toISOString(),
+          },
+        ]);
+        setInsights(Array.isArray(data.insights) ? data.insights : generateInsights(nextFinances));
+        setStats(data.stats ?? getDashboardSummary(nextFinances));
+      } catch {
+        if (!isActive) return;
+        setEmails([]);
+        setTasks([]);
+        setEvents([]);
+        setFinances([]);
+        setChatMessages([]);
+        setInsights([]);
+        setStats(getDashboardSummary([]));
+      }
+    }
+
+    loadData();
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   const categorizeEmails = useCallback(() => {
     setEmails((prev) => categorizeAllEmails(prev));
@@ -111,6 +161,7 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       emails,
       tasks,
       events,
+      finances,
       chatMessages,
       insights,
       stats,
@@ -125,6 +176,7 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       emails,
       tasks,
       events,
+      finances,
       chatMessages,
       insights,
       stats,

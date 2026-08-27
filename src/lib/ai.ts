@@ -36,7 +36,9 @@ export function categorizeAllEmails(emails: Email[]): Email[] {
   }));
 }
 
-export function generateInsights(finances: MonthlyFinance[] = monthlyFinances): BusinessInsight[] {
+export function generateInsights(finances: MonthlyFinance[] = []): BusinessInsight[] {
+  if (finances.length === 0) return [];
+
   const totalRevenue = finances.reduce((s, m) => s + m.revenue, 0);
   const totalExpenses = finances.reduce((s, m) => s + m.expenses, 0);
   const netProfit = totalRevenue - totalExpenses;
@@ -100,7 +102,17 @@ export function generateInsights(finances: MonthlyFinance[] = monthlyFinances): 
   return insights;
 }
 
-export function getDashboardSummary(finances: MonthlyFinance[] = monthlyFinances) {
+export function getDashboardSummary(finances: MonthlyFinance[] = []) {
+  if (finances.length === 0) {
+    return {
+      totalRevenue: 0,
+      totalExpenses: 0,
+      netProfit: 0,
+      profitMargin: 0,
+      isCurrentlyLosing: false,
+    };
+  }
+
   const totalRevenue = finances.reduce((s, m) => s + m.revenue, 0);
   const totalExpenses = finances.reduce((s, m) => s + m.expenses, 0);
   const netProfit = totalRevenue - totalExpenses;
@@ -110,7 +122,7 @@ export function getDashboardSummary(finances: MonthlyFinance[] = monthlyFinances
     totalRevenue,
     totalExpenses,
     netProfit,
-    profitMargin: (netProfit / totalRevenue) * 100,
+    profitMargin: totalRevenue === 0 ? 0 : (netProfit / totalRevenue) * 100,
     isCurrentlyLosing: latest ? latest.revenue < latest.expenses : false,
   };
 }

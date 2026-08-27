@@ -5,10 +5,23 @@ import { syncGmailEmails, syncGmailCalendar } from "@/lib/gmail";
 import { syncOutlookForAccount } from "@/lib/outlook";
 import { getValidAccessToken } from "@/lib/tokens";
 import { mapEmail, mapEvent } from "@/lib/mappers";
+import { isDemoUserEmail } from "@/lib/seed";
 
 export async function POST() {
   try {
     const userId = await requireUserId();
+    const currentUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { email: true },
+    });
+
+    if (currentUser && isDemoUserEmail(currentUser.email)) {
+      return NextResponse.json(
+        { error: "Demo accounts cannot sync live Gmail or Outlook accounts." },
+        { status: 403 }
+      );
+    }
+
     const accounts = await prisma.account.findMany({
       where: {
         userId,

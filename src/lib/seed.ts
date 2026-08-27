@@ -7,7 +7,20 @@ import {
   monthlyFinances,
 } from "./data";
 
+export const DEMO_USER_EMAIL = process.env.DEMO_USER_EMAIL ?? "demo@operaops.local";
+
+export function isDemoUserEmail(email?: string | null): boolean {
+  return !!email && email.toLowerCase() === DEMO_USER_EMAIL.toLowerCase();
+}
+
 export async function seedUserData(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { email: true },
+  });
+
+  if (!user || !isDemoUserEmail(user.email)) return;
+
   const existing = await prisma.email.count({ where: { userId } });
   if (existing > 0) return;
 
@@ -71,14 +84,13 @@ export async function seedUserData(userId: string) {
 export async function ensureDemoUser() {
   if (process.env.DEMO_LOGIN !== "true") return;
 
-  const email = "demo@operaops.local";
-  const existing = await prisma.user.findUnique({ where: { email } });
+  const existing = await prisma.user.findUnique({ where: { email: DEMO_USER_EMAIL } });
   if (existing) return;
 
   const passwordHash = await bcrypt.hash("demo1234", 10);
   const user = await prisma.user.create({
     data: {
-      email,
+      email: DEMO_USER_EMAIL,
       name: "Demo User",
       passwordHash,
     },

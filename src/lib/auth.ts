@@ -8,7 +8,7 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
 import prisma from "./prisma";
-import { ensureDemoUser, seedUserData } from "./seed";
+import { DEMO_USER_EMAIL, ensureDemoUser, isDemoUserEmail, seedUserData } from "./seed";
 
 const providers: NextAuthConfig["providers"] = [];
 
@@ -89,8 +89,9 @@ if (process.env.DEMO_LOGIN === "true") {
         const email = credentials?.email as string;
         const password = credentials?.password as string;
         if (!email || !password) return null;
+        if (!isDemoUserEmail(email)) return null;
 
-        const user = await prisma.user.findUnique({ where: { email } });
+        const user = await prisma.user.findUnique({ where: { email: DEMO_USER_EMAIL } });
         if (!user?.passwordHash) return null;
 
         const valid = await bcrypt.compare(password, user.passwordHash);
@@ -102,8 +103,8 @@ if (process.env.DEMO_LOGIN === "true") {
   );
 }
 
-async function seedUserIfNeeded(user: { id?: string | null }) {
-  if (user.id) await seedUserData(user.id);
+async function seedUserIfNeeded(user: { id?: string | null; email?: string | null }) {
+  if (user.id && isDemoUserEmail(user.email)) await seedUserData(user.id);
 }
 
 export const authConfig: NextAuthConfig = {
@@ -124,7 +125,11 @@ export const authConfig: NextAuthConfig = {
       }
       return session;
     },
-    signIn: async ({ user }) => {
+    signIn: async ({ user, account }) => {
+      if (!user?.email) return false;
+      if (isDemoUserEmail(user.email)) {
+        return account?.provider === "credentials";
+      }
       return true;
     },
   },

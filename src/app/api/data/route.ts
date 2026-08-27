@@ -3,12 +3,19 @@ import { auth, requireUserId } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { generateInsights, getDashboardSummary } from "@/lib/ai";
 import { mapChatMessage, mapEmail, mapEvent, mapTask } from "@/lib/mappers";
-import { ensureDemoUser } from "@/lib/seed";
+import { ensureDemoUser, isDemoUserEmail } from "@/lib/seed";
 
 export async function GET() {
   try {
-    await ensureDemoUser();
     const userId = await requireUserId();
+    const currentUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { email: true },
+    });
+
+    if (currentUser && isDemoUserEmail(currentUser.email)) {
+      await ensureDemoUser();
+    }
 
     const [emails, tasks, events, chatMessages, finances, accounts] =
       await Promise.all([
