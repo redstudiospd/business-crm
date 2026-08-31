@@ -1,10 +1,23 @@
 import { NextResponse } from "next/server";
 import { requireUserId } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { isDemoUserEmail } from "@/lib/seed";
 
 export async function POST(request: Request) {
   try {
     const userId = await requireUserId();
+    const currentUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { email: true },
+    });
+
+    if (currentUser && isDemoUserEmail(currentUser.email)) {
+      return NextResponse.json(
+        { error: "The demo account is shared and read-only, so files can't be uploaded here. Sign in with Google, Microsoft, or Apple to upload your own files." },
+        { status: 403 }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get("file");
 

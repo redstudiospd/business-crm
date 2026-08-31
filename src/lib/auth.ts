@@ -9,6 +9,7 @@ import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
 import prisma from "./prisma";
 import { DEMO_USER_EMAIL, ensureDemoUser, isDemoUserEmail, seedUserData } from "./seed";
+import { authConfig } from "./auth.config";
 
 const providers: NextAuthConfig["providers"] = [];
 
@@ -107,13 +108,11 @@ async function seedUserIfNeeded(user: { id?: string | null; email?: string | nul
   if (user.id && isDemoUserEmail(user.email)) await seedUserData(user.id);
 }
 
-export const authConfig: NextAuthConfig = {
+export const fullAuthConfig: NextAuthConfig = {
+  ...authConfig,
   adapter: PrismaAdapter(prisma),
   providers,
   session: { strategy: "jwt" },
-  pages: {
-    signIn: "/login",
-  },
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user?.id) token.sub = user.id;
@@ -141,7 +140,7 @@ export const authConfig: NextAuthConfig = {
   trustHost: true,
 };
 
-export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
+export const { handlers, auth, signIn, signOut } = NextAuth(fullAuthConfig);
 
 export async function requireUserId(): Promise<string> {
   const session = await auth();

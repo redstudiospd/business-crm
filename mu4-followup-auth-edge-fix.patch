@@ -1,0 +1,65 @@
+diff -ruN '--exclude=node_modules' '--exclude=.next' '--exclude=.git' sim2/src/lib/auth.config.ts mod_flat/src/lib/auth.config.ts
+--- sim2/src/lib/auth.config.ts	1970-01-01 00:00:00.000000000 +0000
++++ mod_flat/src/lib/auth.config.ts	2026-08-31 10:03:04.526394122 +0000
+@@ -0,0 +1,12 @@
++import type { NextAuthConfig } from "next-auth";
++
++// Kept deliberately minimal and free of Node.js-only imports (Prisma, bcrypt,
++// nodemailer, googleapis, etc.) so it can be safely imported from
++// src/middleware.ts, which runs in the Edge runtime. The full config with
++// providers/adapter lives in src/lib/auth.ts and extends this file.
++export const authConfig: NextAuthConfig = {
++  pages: {
++    signIn: "/login",
++  },
++  providers: [],
++};
+diff -ruN '--exclude=node_modules' '--exclude=.next' '--exclude=.git' sim2/src/lib/auth.ts mod_flat/src/lib/auth.ts
+--- sim2/src/lib/auth.ts	2026-08-31 10:03:16.361136161 +0000
++++ mod_flat/src/lib/auth.ts	2026-08-31 10:03:04.524680994 +0000
+@@ -9,6 +9,7 @@
+ import type { NextAuthConfig } from "next-auth";
+ import prisma from "./prisma";
+ import { DEMO_USER_EMAIL, ensureDemoUser, isDemoUserEmail, seedUserData } from "./seed";
++import { authConfig } from "./auth.config";
+ 
+ const providers: NextAuthConfig["providers"] = [];
+ 
+@@ -107,13 +108,11 @@
+   if (user.id && isDemoUserEmail(user.email)) await seedUserData(user.id);
+ }
+ 
+-export const authConfig: NextAuthConfig = {
++export const fullAuthConfig: NextAuthConfig = {
++  ...authConfig,
+   adapter: PrismaAdapter(prisma),
+   providers,
+   session: { strategy: "jwt" },
+-  pages: {
+-    signIn: "/login",
+-  },
+   callbacks: {
+     jwt: async ({ token, user }) => {
+       if (user?.id) token.sub = user.id;
+@@ -141,7 +140,7 @@
+   trustHost: true,
+ };
+ 
+-export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
++export const { handlers, auth, signIn, signOut } = NextAuth(fullAuthConfig);
+ 
+ export async function requireUserId(): Promise<string> {
+   const session = await auth();
+diff -ruN '--exclude=node_modules' '--exclude=.next' '--exclude=.git' sim2/src/middleware.ts mod_flat/src/middleware.ts
+--- sim2/src/middleware.ts	2026-08-31 10:03:16.367071105 +0000
++++ mod_flat/src/middleware.ts	2026-08-31 10:03:04.526716498 +0000
+@@ -1,5 +1,8 @@
+ import { NextResponse } from "next/server";
+-import { auth } from "@/lib/auth";
++import NextAuth from "next-auth";
++import { authConfig } from "@/lib/auth.config";
++
++const { auth } = NextAuth(authConfig);
+ 
+ // Routes that require a signed-in session. Everything under these prefixes
+ // lives inside the (crm) route group / AppShell.
