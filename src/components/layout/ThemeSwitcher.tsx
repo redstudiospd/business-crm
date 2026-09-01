@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const themes = [
   { id: "system", label: "System" },
@@ -9,15 +9,12 @@ const themes = [
 ];
 
 export function ThemeSwitcher() {
-  const [theme, setTheme] = useState("system");
+  const [theme, setTheme] = useState<string>(() => {
+    if (typeof window === "undefined") return "system";
+    return window.localStorage.getItem("theme") || "system";
+  });
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem("theme") || "system";
-    setTheme(stored);
-    applyTheme(stored);
-  }, []);
-
-  const applyTheme = (value: string) => {
+  const applyTheme = useCallback((value: string) => {
     const root = document.documentElement;
     root.classList.remove("light", "dark");
     if (value === "light") {
@@ -26,11 +23,14 @@ export function ThemeSwitcher() {
       root.classList.add("dark");
     }
     window.localStorage.setItem("theme", value);
-  };
+  }, []);
+
+  useEffect(() => {
+    applyTheme(theme);
+  }, [applyTheme, theme]);
 
   const handleChange = (value: string) => {
     setTheme(value);
-    applyTheme(value);
   };
 
   return (

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Safe demo-seed script for local use.
 // Usage: DATABASE_URL="postgresql://..." node scripts/seed-demo.js
 
