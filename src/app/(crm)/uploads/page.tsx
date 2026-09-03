@@ -35,14 +35,14 @@ export default function UploadsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">File Uploads</h1>
-        <p className="mt-1 text-slate-400">
+        <h1 className="text-2xl font-bold text-ink">File Uploads</h1>
+        <p className="mt-1 text-muted">
           Upload documents, PDFs, and Excel files for later AI analysis and graphing.
         </p>
       </div>
 
-      <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-8">
-        <label className="flex h-48 w-full cursor-pointer flex-col items-center justify-center rounded-3xl border border-dashed border-slate-700 bg-slate-950/80 text-center text-slate-300 transition hover:border-slate-500 hover:bg-slate-900">
+      <div className="rounded-3xl border border-hairline bg-surface-2 p-8">
+        <label className="flex h-48 w-full cursor-pointer flex-col items-center justify-center rounded-3xl border border-dashed border-hairline bg-surface text-center text-ink transition-colors duration-200 ease-out hover:border-accent/50 hover:bg-surface-3">
           <input
             type="file"
             accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt"
@@ -51,17 +51,17 @@ export default function UploadsPage() {
             disabled={uploading}
           />
           <div className="space-y-3">
-            <p className="text-lg font-semibold text-white">Select a file to upload</p>
-            <p className="text-sm text-slate-500">
+            <p className="text-lg font-semibold text-ink">Select a file to upload</p>
+            <p className="text-sm text-muted">
               Supported formats: PDF, Word, Excel, CSV, text.
             </p>
-            <p className="text-sm text-slate-400">Your file is stored securely for AI review later.</p>
+            <p className="text-sm text-muted">Your file is stored securely for AI review later.</p>
           </div>
         </label>
       </div>
 
       {status ? (
-        <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4 text-sm text-slate-200">
+        <div className="rounded-xl border border-hairline bg-surface-2 p-4 text-sm text-ink">
           {status}
         </div>
       ) : null}

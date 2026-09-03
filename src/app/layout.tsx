@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OperaOPS — AI-Driven Business Operations CRM",
+  title: "aeson.ai — AI-Driven Business Operations CRM",
   description:
-    "OperaOPS connects business documents, emails, calendar events, and tasks into one AI-powered operations platform.",
+    "aeson.ai connects business documents, emails, calendar events, and tasks into one AI-powered operations platform.",
 };
 
 export default function RootLayout({
@@ -29,7 +29,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-slate-950 font-sans text-slate-200">
+      <body className="min-h-full bg-surface font-sans text-ink">
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>

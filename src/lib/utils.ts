@@ -13,8 +13,8 @@ export const priorityConfig = {
   },
   high: {
     label: "High Priority",
-    color: "bg-orange-500/15 text-orange-400 border-orange-500/30",
-    dot: "bg-orange-500",
+    color: "bg-accent/10 text-accent border-accent/30",
+    dot: "bg-accent",
     order: 1,
   },
   medium: {
@@ -25,18 +25,18 @@ export const priorityConfig = {
   },
   low: {
     label: "Least Priority",
-    color: "bg-slate-500/15 text-slate-400 border-slate-500/30",
-    dot: "bg-slate-500",
+    color: "bg-surface-3 text-muted border-hairline",
+    dot: "bg-muted",
     order: 3,
   },
 } as const;
 
 export const categoryConfig = {
-  important: { label: "Important", color: "bg-emerald-500/15 text-emerald-400" },
-  "follow-up": { label: "Follow-up", color: "bg-blue-500/15 text-blue-400" },
+  important: { label: "Important", color: "bg-accent/10 text-accent" },
+  "follow-up": { label: "Follow-up", color: "bg-surface-3 text-ink" },
   spam: { label: "Spam", color: "bg-red-500/15 text-red-400" },
-  newsletter: { label: "Newsletter", color: "bg-purple-500/15 text-purple-400" },
-  uncategorized: { label: "Uncategorized", color: "bg-slate-500/15 text-slate-400" },
+  newsletter: { label: "Newsletter", color: "bg-surface-3 text-muted" },
+  uncategorized: { label: "Uncategorized", color: "bg-surface-3 text-muted" },
 } as const;
 
 export function formatCurrency(amount: number) {

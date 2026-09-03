@@ -1,70 +1,147 @@
 @import "tailwindcss";
 
 html {
-  color-scheme: dark light;
+ color-scheme: dark light;
 }
 
 :root {
-  color-scheme: dark;
-  --background: #020617;
-  --foreground: #e2e8f0;
-  --surface: #111827;
-  --surface-muted: #0f172a;
-  --border: rgba(148, 163, 184, 0.16);
-  --muted: #94a3b8;
-  --accent: #6366f1;
-  --accent-strong: #818cf8;
+ color-scheme: dark;
+
+ /* aeson.ai design tokens (dark mode) */
+ --bg-primary: #0d0d0d;
+ --bg-secondary: #161616;
+ --bg-tertiary: #1f1f1f;
+ --border-hairline: #2a2a2a;
+ --text-primary: #f5f4f0;
+ --text-secondary: #9a9a94;
+ --accent: #e9553d;
+ --accent-hover: #ff6b4f;
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
-    color-scheme: light;
-    --background: #f8fafc;
-    --foreground: #0f172a;
-    --surface: #ffffff;
-    --surface-muted: #e2e8f0;
-    --border: rgba(148, 163, 184, 0.24);
-    --muted: #64748b;
-    --accent: #4338ca;
-    --accent-strong: #6366f1;
-  }
+ :root {
+   color-scheme: light;
+
+   /* aeson.ai design tokens (light mode) */
+   --bg-primary: #f5f4f0;
+   --bg-secondary: #ffffff;
+   --bg-tertiary: #ecece6;
+   --border-hairline: #dedad2;
+   --text-primary: #1a1a1a;
+   --text-secondary: #6b6b64;
+   --accent: #e9553d;
+   --accent-hover: #d64a32;
+ }
 }
 
 html.light {
-  color-scheme: light;
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --surface: #ffffff;
-  --surface-muted: #e2e8f0;
-  --border: rgba(148, 163, 184, 0.24);
-  --muted: #64748b;
-  --accent: #4338ca;
-  --accent-strong: #6366f1;
+ color-scheme: light;
+
+ /* aeson.ai tokens (light) */
+ --bg-primary: #f5f4f0;
+ --bg-secondary: #ffffff;
+ --bg-tertiary: #ecece6;
+ --border-hairline: #dedad2;
+ --text-primary: #1a1a1a;
+ --text-secondary: #6b6b64;
+ --accent: #e9553d;
+ --accent-hover: #d64a32;
 }
 
 html.dark {
-  color-scheme: dark;
-  --background: #020617;
-  --foreground: #e2e8f0;
-  --surface: #111827;
-  --surface-muted: #0f172a;
-  --border: rgba(148, 163, 184, 0.16);
-  --muted: #94a3b8;
-  --accent: #6366f1;
-  --accent-strong: #818cf8;
+ color-scheme: dark;
+
+ /* aeson.ai tokens (dark) */
+ --bg-primary: #0d0d0d;
+ --bg-secondary: #161616;
+ --bg-tertiary: #1f1f1f;
+ --border-hairline: #2a2a2a;
+ --text-primary: #f5f4f0;
+ --text-secondary: #9a9a94;
+ --accent: #e9553d;
+ --accent-hover: #ff6b4f;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+ --color-background: var(--bg-primary);
+ --color-foreground: var(--text-primary);
+ --color-surface: var(--bg-primary);
+ --color-surface-2: var(--bg-secondary);
+ --color-surface-3: var(--bg-tertiary);
+ --color-hairline: var(--border-hairline);
+ --color-ink: var(--text-primary);
+ --color-muted: var(--text-secondary);
+ --color-accent: var(--accent);
+ --color-accent-hover: var(--accent-hover);
+ --font-sans: var(--font-geist-sans);
+ --font-mono: var(--font-geist-mono);
+}
+
+/* Typography scale from aeson.ai design system */
+.display {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.body {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: var(--text-secondary);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg-primary);
+  color: var(--text-primary);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-item:hover:not(.bg-ink),
+  .sidebar-action:hover,
+  .theme-option:hover:not(.bg-ink),
+  .sidebar-brand:hover,
+  .profile-avatar:hover,
+  .stat-card:hover {
+    transform: translateY(-1px);
+  }
+
+  .nav-item:hover:not(.bg-ink) {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .sidebar-action:hover,
+  .theme-option:hover:not(.bg-ink),
+  .stat-card:hover {
+    background-color: var(--bg-tertiary);
+  }
+
+  .theme-option:hover:not(.bg-ink) {
+    color: var(--text-primary);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-item,
+  .sidebar-action,
+  .theme-option,
+  .sidebar-brand,
+  .profile-avatar,
+  .stat-card {
+    transition: none !important;
+    transform: none !important;
+  }
 }
 
 button,

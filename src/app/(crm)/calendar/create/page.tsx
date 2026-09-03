@@ -29,67 +29,63 @@ export default function CreateEventPage() {
   };
 
   return (
-    <div className="space-y-8 rounded-3xl border border-slate-800 bg-slate-900/70 p-8">
+    <div className="space-y-8 rounded-3xl border border-hairline bg-surface-2 p-8">
       <div>
-        <h1 className="text-2xl font-semibold text-white">Schedule Event</h1>
-        <p className="mt-2 text-sm text-slate-400">
+        <h1 className="text-2xl font-semibold text-ink">Schedule Event</h1>
+        <p className="mt-2 text-sm text-muted">
           Add a calendar event manually and keep your schedule aligned with business priorities.
         </p>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <label className="block text-sm text-slate-200">
+        <label className="block text-sm text-ink">
           Title
           <input
             value={title}
             onChange={(event) => setTitle(event.target.value)}
             required
-            className="mt-2 w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-slate-100 outline-none focus:border-indigo-500"
+            className="mt-2 w-full rounded-sm border border-hairline bg-surface px-4 py-3 text-ink outline-none transition-colors duration-200 ease-out focus:border-accent"
           />
         </label>
-        <label className="block text-sm text-slate-200">
+        <label className="block text-sm text-ink">
           Description
           <textarea
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             required
             rows={5}
-            className="mt-2 w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-3 text-slate-100 outline-none focus:border-indigo-500"
+            className="mt-2 w-full rounded-sm border border-hairline bg-surface px-4 py-3 text-ink outline-none transition-colors duration-200 ease-out focus:border-accent"
           />
         </label>
         <div className="grid gap-4 md:grid-cols-2">
-          <label className="block text-sm text-slate-200">
+          <label className="block text-sm text-ink">
             Start
             <input
               type="datetime-local"
               value={start}
               onChange={(event) => setStart(event.target.value)}
               required
-              className="mt-2 w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-slate-100 outline-none focus:border-indigo-500"
+              className="mt-2 w-full rounded-sm border border-hairline bg-surface px-4 py-3 text-ink outline-none transition-colors duration-200 ease-out focus:border-accent"
             />
           </label>
-          <label className="block text-sm text-slate-200">
+          <label className="block text-sm text-ink">
             End
             <input
               type="datetime-local"
               value={end}
               onChange={(event) => setEnd(event.target.value)}
               required
-              className="mt-2 w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-slate-100 outline-none focus:border-indigo-500"
+              className="mt-2 w-full rounded-sm border border-hairline bg-surface px-4 py-3 text-ink outline-none transition-colors duration-200 ease-out focus:border-accent"
             />
           </label>
         </div>
         <button
           type="submit"
-          className="rounded-2xl bg-indigo-500 px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-400"
+          className="rounded-sm bg-accent px-6 py-3 text-sm font-semibold text-ink transition-colors duration-200 ease-out hover:bg-accent-hover"
         >
           Create event
         </button>
       </form>
-      {status ? (
-        <div className="rounded-2xl bg-slate-800 px-4 py-3 text-sm text-slate-200">
-          {status}
-        </div>
-      ) : null}
+      {status ? <div className="rounded-sm bg-surface px-4 py-3 text-sm text-ink">{status}</div> : null}
     </div>
   );
 }

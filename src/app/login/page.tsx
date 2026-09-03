@@ -34,10 +34,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="mx-auto max-w-md space-y-6 rounded-3xl border border-slate-800 bg-slate-950/95 p-8 shadow-lg shadow-slate-950/20">
+    <div className="mx-auto max-w-md space-y-6 rounded-3xl border border-hairline bg-surface-2 p-8 shadow-lg shadow-black/20">
       <div>
-        <h1 className="text-3xl font-semibold text-white">Sign in to OperaOPS</h1>
-        <p className="mt-2 text-sm text-slate-400">
+        <h1 className="text-3xl font-semibold text-ink">Sign in to aeson.ai</h1>
+        <p className="mt-2 text-sm text-muted">
           Access your AI-powered business workspace with Google, Microsoft, Apple, or email.
         </p>
       </div>
@@ -48,7 +48,7 @@ export default function LoginPage() {
             key={provider.id}
             type="button"
             onClick={() => handleProviderSignIn(provider.id)}
-            className="w-full rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm font-medium text-slate-100 hover:border-slate-700 hover:bg-slate-800"
+            className="w-full rounded-sm border border-hairline bg-surface px-4 py-3 text-sm font-medium text-ink transition-colors duration-200 ease-out hover:bg-surface-3"
           >
             {provider.label}
           </button>
@@ -56,29 +56,29 @@ export default function LoginPage() {
       </div>
 
       <form onSubmit={handleEmailSignIn} className="space-y-4">
-        <label className="block text-sm font-medium text-slate-300">
+        <label className="block text-sm font-medium text-ink">
           Email address
           <input
             type="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
-            className="mt-2 w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-slate-100 outline-none focus:border-indigo-500"
+            className="mt-2 w-full rounded-sm border border-hairline bg-surface px-4 py-3 text-ink outline-none transition-colors duration-200 ease-out focus:border-accent"
           />
         </label>
         <button
           type="submit"
-          className="w-full rounded-2xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white hover:bg-indigo-500"
+          className="w-full rounded-sm bg-accent px-4 py-3 text-sm font-semibold text-ink transition-colors duration-200 ease-out hover:bg-accent-hover"
         >
           Send login link
         </button>
       </form>
 
       {status ? (
-        <p className="rounded-2xl bg-slate-900 px-4 py-3 text-sm text-slate-200">{status}</p>
+        <p className="rounded-sm bg-surface px-4 py-3 text-sm text-ink">{status}</p>
       ) : null}
 
-      <p className="text-center text-sm text-slate-500">
+      <p className="text-center text-sm text-muted">
         Not a member? Use one of the login options above to create an account.
       </p>
     </div>

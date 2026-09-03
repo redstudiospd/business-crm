@@ -33,22 +33,24 @@ export function Sidebar() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const userName = session?.user?.name ?? "Business User";
-  const userEmail = session?.user?.email ?? "workspace@operaops.ai";
+  const userEmail = session?.user?.email ?? "workspace@aeson.ai";
   const initials = userName
     .split(/\s+/)
     .map((part) => part[0]?.toUpperCase() ?? "")
     .join("")
     .slice(0, 2) || "OP";
+  const isLoading = status === "loading";
+  const isSignedOut = status === "unauthenticated";
 
   return (
-    <aside className="flex w-64 shrink-0 flex-col border-r border-slate-800 bg-slate-950">
-      <div className="flex items-center gap-3 border-b border-slate-800 px-6 py-5">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600">
-          <Sparkles className="h-5 w-5 text-white" />
+    <aside className="flex w-64 shrink-0 flex-col border-r border-hairline bg-surface">
+      <div className="flex items-center gap-3 border-b border-hairline px-6 py-5">
+        <div className="sidebar-brand flex h-10 w-10 items-center justify-center rounded-sm bg-accent text-ink shadow-sm transition-transform transition-colors duration-200 ease-out active:scale-[0.98]">
+          <Sparkles className="h-5 w-5" />
         </div>
         <div>
-          <h1 className="text-sm font-semibold text-white">OperaOPS</h1>
-          <p className="text-xs text-slate-500">AI Operations Suite</p>
+          <h1 className="text-sm font-semibold text-ink">aeson.ai</h1>
+          <p className="text-xs text-muted">AI Operations Suite</p>
         </div>
       </div>
 
@@ -60,10 +62,8 @@ export function Sidebar() {
               key={href}
               href={href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-                active
-                  ? "bg-indigo-600/20 text-indigo-300"
-                  : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+                "nav-item flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium transition-transform transition-colors duration-200 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
+                active ? "bg-ink text-surface shadow-sm" : "text-muted"
               )}
             >
               <Icon className="h-4 w-4 shrink-0" />
@@ -73,23 +73,44 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="border-t border-slate-800 p-4">
-        <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-3">
+      <div className="border-t border-hairline p-4">
+        <div
+          className={cn(
+            "rounded-sm border p-3 transition-colors duration-200 ease-out",
+            isLoading
+              ? "border-dashed border-hairline bg-surface-2/80"
+              : isSignedOut
+                ? "border-hairline bg-surface-2 text-muted"
+                : "border-hairline bg-surface-2"
+          )}
+        >
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 text-sm font-semibold text-white">
-              {initials}
+            <div
+              className={cn(
+                "profile-avatar flex h-10 w-10 items-center justify-center rounded-full bg-accent text-sm font-semibold text-ink transition-colors duration-200 ease-out",
+                isLoading && "bg-accent/80"
+              )}
+            >
+              {isLoading ? "" : initials}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-white">{userName}</p>
-              <p className="truncate text-xs text-slate-400">
-                {status === "loading" ? "Loading profile..." : userEmail}
+              <p className="truncate text-sm font-medium text-ink">
+                {isLoading ? "Loading profile..." : userName}
+              </p>
+              <p className="truncate text-xs text-muted">
+                {isLoading
+                  ? "Syncing workspace"
+                  : isSignedOut
+                    ? "Sign in to continue"
+                    : userEmail}
               </p>
             </div>
           </div>
+
           <div className="mt-3 flex gap-2">
             <Link
               href="/dashboard"
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-200 hover:border-slate-600 hover:bg-slate-700"
+              className="sidebar-action inline-flex flex-1 items-center justify-center gap-2 rounded-sm border border-hairline bg-surface px-3 py-2 text-xs font-medium text-ink transition-transform transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface active:scale-[0.98]"
             >
               <UserCircle2 className="h-3.5 w-3.5" />
               Profile
@@ -97,7 +118,13 @@ export function Sidebar() {
             <button
               type="button"
               onClick={() => signOut({ callbackUrl: "/login" })}
-              className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-medium text-red-200 hover:bg-red-500/20"
+              disabled={isLoading}
+              className={cn(
+                "sidebar-action inline-flex items-center justify-center gap-2 rounded-sm border px-3 py-2 text-xs font-medium transition-transform transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface active:scale-[0.98]",
+                isLoading
+                  ? "cursor-not-allowed border-hairline bg-surface-3 text-muted"
+                  : "border-red-500/30 bg-red-500/10 text-red-200"
+              )}
             >
               <LogOut className="h-3.5 w-3.5" />
               Logout

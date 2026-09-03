@@ -13,7 +13,7 @@ const suggestions = [
 ];
 
 export function ChatAssistant() {
-  const { chatMessages, addChatMessage, stats, tasks, emails, events } = useCRM();
+  const { chatMessages, addChatMessage, tasks, emails, events } = useCRM();
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -58,13 +58,13 @@ export function ChatAssistant() {
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white">AI Chat Assistant</h1>
-        <p className="mt-1 text-slate-400">
+        <h1 className="text-2xl font-bold text-ink">AI Chat Assistant</h1>
+        <p className="mt-1 text-muted">
           Ask questions about your business data, tasks, emails, and insights
         </p>
       </div>
 
-      <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-slate-800 bg-slate-900/50">
+      <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-hairline bg-surface-2">
         <div className="flex-1 space-y-4 overflow-y-auto p-6">
           {chatMessages.map((msg) => (
             <div
@@ -77,25 +77,25 @@ export function ChatAssistant() {
               <div
                 className={cn(
                   "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg",
-                  msg.role === "user" ? "bg-indigo-600" : "bg-slate-800"
+                  msg.role === "user" ? "bg-accent" : "bg-surface-3"
                 )}
               >
                 {msg.role === "user" ? (
-                  <User className="h-4 w-4 text-white" />
+                  <User className="h-4 w-4 text-ink" />
                 ) : (
-                  <Bot className="h-4 w-4 text-indigo-400" />
+                  <Bot className="h-4 w-4 text-accent" />
                 )}
               </div>
               <div
                 className={cn(
                   "max-w-[75%] rounded-xl px-4 py-3 text-sm leading-relaxed",
                   msg.role === "user"
-                    ? "bg-indigo-600 text-white"
-                    : "bg-slate-800 text-slate-200"
+                    ? "bg-accent text-ink"
+                    : "bg-surface-3 text-ink"
                 )}
               >
                 <p>{msg.content}</p>
-                <p className="mt-1 text-[10px] opacity-50">
+                <p className="mt-1 text-[10px] opacity-60">
                   {formatDateTime(msg.timestamp)}
                 </p>
               </div>
@@ -103,10 +103,10 @@ export function ChatAssistant() {
           ))}
           {isLoading && (
             <div className="flex gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-800">
-                <Bot className="h-4 w-4 text-indigo-400" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-3">
+                <Bot className="h-4 w-4 text-accent" />
               </div>
-              <div className="flex items-center gap-2 rounded-xl bg-slate-800 px-4 py-3 text-sm text-slate-400">
+              <div className="flex items-center gap-2 rounded-xl bg-surface-3 px-4 py-3 text-sm text-muted">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 Thinking...
               </div>
@@ -115,13 +115,13 @@ export function ChatAssistant() {
           <div ref={bottomRef} />
         </div>
 
-        <div className="border-t border-slate-800 p-4">
+        <div className="border-t border-hairline p-4">
           <div className="mb-3 flex flex-wrap gap-2">
             {suggestions.map((s) => (
               <button
                 key={s}
                 onClick={() => sendMessage(s)}
-                className="rounded-full border border-slate-700 bg-slate-800/50 px-3 py-1 text-xs text-slate-400 transition hover:border-indigo-500/50 hover:text-indigo-300"
+                className="rounded-full border border-hairline bg-surface px-3 py-1 text-xs text-muted transition-colors duration-200 ease-out hover:border-accent/60 hover:text-accent"
               >
                 {s}
               </button>
@@ -138,12 +138,12 @@ export function ChatAssistant() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask about profits, tasks, emails, calendar..."
-              className="flex-1 rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none"
+              className="flex-1 rounded-lg border border-hairline bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-muted focus:border-accent focus:outline-none"
             />
             <button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-500 disabled:opacity-50"
+              className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-ink transition-colors duration-200 ease-out hover:bg-accent-hover disabled:opacity-50"
             >
               <Send className="h-4 w-4" />
               Send

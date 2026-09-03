@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import {
   format,
   startOfMonth,
@@ -11,6 +10,7 @@ import {
   parseISO,
 } from "date-fns";
 import { Calendar, Clock, Users, AlertCircle } from "lucide-react";
+import { Eyebrow } from "@/components/Eyebrow";
 import { useCRM } from "@/lib/store";
 import { cn, formatDateTime } from "@/lib/utils";
 import type { CalendarEvent } from "@/lib/types";
@@ -22,7 +22,7 @@ const typeIcons = {
 };
 
 const typeColors = {
-  meeting: "border-indigo-500/40 bg-indigo-500/10 text-indigo-300",
+  meeting: "border-accent/40 bg-accent/10 text-accent",
   deadline: "border-red-500/40 bg-red-500/10 text-red-300",
   reminder: "border-yellow-500/40 bg-yellow-500/10 text-yellow-300",
 };
@@ -34,47 +34,39 @@ export function CalendarView() {
   const monthEnd = endOfMonth(today);
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
-  const upcoming = useMemo(
-    () =>
-      [...events]
-        .filter((e) => new Date(e.start) >= today)
-        .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()),
-    [events]
-  );
+  const upcoming = [...events]
+    .filter((e) => new Date(e.start) >= today)
+    .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
 
-  const eventsByDay = useMemo(() => {
-    const map = new Map<string, CalendarEvent[]>();
-    events.forEach((event) => {
-      const key = format(parseISO(event.start), "yyyy-MM-dd");
-      map.set(key, [...(map.get(key) ?? []), event]);
-    });
-    return map;
-  }, [events]);
+  const eventsByDay = new Map<string, CalendarEvent[]>();
+  events.forEach((event) => {
+    const key = format(parseISO(event.start), "yyyy-MM-dd");
+    eventsByDay.set(key, [...(eventsByDay.get(key) ?? []), event]);
+  });
 
   const startPad = monthStart.getDay();
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-white">Calendar & Scheduling</h1>
-        <p className="mt-1 text-slate-400">
+      <div className="space-y-4">
+        <Eyebrow>Calendar</Eyebrow>
+        <h1 className="display text-ink">Calendar & Scheduling</h1>
+        <p className="body max-w-2xl">
           Deadlines and meetings auto-scheduled from email analysis
         </p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+        <div className="lg:col-span-2 rounded-sm border border-hairline bg-surface-2 p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-white">
-              {format(today, "MMMM yyyy")}
-            </h2>
-            <div className="flex items-center gap-2 text-xs text-slate-400">
+            <h2 className="text-lg font-semibold text-ink">{format(today, "MMMM yyyy")}</h2>
+            <div className="flex items-center gap-2 text-xs text-muted">
               <Calendar className="h-4 w-4" />
               AI-synced from emails
             </div>
           </div>
 
-          <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-slate-500">
+          <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-muted">
             {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
               <div key={d} className="py-2">{d}</div>
             ))}
@@ -91,15 +83,15 @@ export function CalendarView() {
                 <div
                   key={key}
                   className={cn(
-                    "aspect-square rounded-lg border p-1 transition",
-                    isSameMonth(day, today) ? "border-slate-800" : "border-transparent opacity-40",
-                    isToday(day) && "border-indigo-500/50 bg-indigo-500/10"
+                    "aspect-square rounded-sm border p-1 transition-colors duration-200 ease-out",
+                    isSameMonth(day, today) ? "border-hairline" : "border-transparent opacity-40",
+                    isToday(day) && "border-accent/50 bg-accent/10"
                   )}
                 >
                   <span
                     className={cn(
                       "flex h-6 w-6 items-center justify-center rounded-full text-xs",
-                      isToday(day) ? "bg-indigo-600 font-bold text-white" : "text-slate-400"
+                      isToday(day) ? "bg-accent font-bold text-ink" : "text-muted"
                     )}
                   >
                     {format(day, "d")}
@@ -109,7 +101,7 @@ export function CalendarView() {
                       <div
                         key={e.id}
                         className={cn(
-                          "truncate rounded px-1 text-[10px] leading-tight",
+                          "truncate rounded-sm px-1 text-[10px] leading-tight",
                           typeColors[e.type]
                         )}
                       >
@@ -117,7 +109,7 @@ export function CalendarView() {
                       </div>
                     ))}
                     {dayEvents.length > 2 && (
-                      <div className="text-[10px] text-slate-500">+{dayEvents.length - 2} more</div>
+                      <div className="text-[10px] text-muted">+{dayEvents.length - 2} more</div>
                     )}
                   </div>
                 </div>
@@ -126,12 +118,12 @@ export function CalendarView() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-          <h2 className="text-lg font-semibold text-white">Upcoming Events</h2>
-          <p className="text-sm text-slate-400">Auto-created from email analysis</p>
+        <div className="rounded-sm border border-hairline bg-surface-2 p-6">
+          <h2 className="text-lg font-semibold text-ink">Upcoming Events</h2>
+          <p className="mt-1 text-sm text-muted">Auto-created from email analysis</p>
           <div className="mt-4 space-y-3">
             {upcoming.length === 0 ? (
-              <p className="text-sm text-slate-500">No upcoming events</p>
+              <p className="text-sm text-muted">No upcoming events</p>
             ) : (
               upcoming.map((event) => {
                 const Icon = typeIcons[event.type];
@@ -139,7 +131,7 @@ export function CalendarView() {
                   <div
                     key={event.id}
                     className={cn(
-                      "rounded-lg border p-3",
+                      "rounded-sm border p-3",
                       typeColors[event.type]
                     )}
                   >
@@ -147,9 +139,7 @@ export function CalendarView() {
                       <Icon className="mt-0.5 h-4 w-4 shrink-0" />
                       <div>
                         <p className="text-sm font-medium">{event.title}</p>
-                        <p className="mt-0.5 text-xs opacity-80">
-                          {formatDateTime(event.start)}
-                        </p>
+                        <p className="mt-0.5 text-xs opacity-80">{formatDateTime(event.start)}</p>
                         <p className="mt-1 text-xs opacity-70">{event.description}</p>
                         {event.sourceEmailId && (
                           <p className="mt-1 text-[10px] uppercase tracking-wide opacity-60">

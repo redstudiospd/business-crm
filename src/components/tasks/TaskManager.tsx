@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { CheckCircle2, Circle, Calendar } from "lucide-react";
+import { Eyebrow } from "@/components/Eyebrow";
 import { useCRM } from "@/lib/store";
 import { priorityConfig, formatDate, cn } from "@/lib/utils";
 import type { TaskPriority } from "@/lib/types";
@@ -26,15 +27,16 @@ export function TaskManager() {
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-white">Task Manager</h1>
-          <p className="mt-1 text-slate-400">
+        <div className="space-y-4">
+          <Eyebrow>Task flow</Eyebrow>
+          <h1 className="display text-ink">Task Manager</h1>
+          <p className="body max-w-2xl">
             Tasks sorted by priority — from critical to least important
           </p>
         </div>
-        <div className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2 text-sm">
-          <span className="text-slate-400">Open tasks: </span>
-          <span className="font-semibold text-white">{totalOpen}</span>
+        <div className="rounded-sm border border-hairline bg-surface-2 px-4 py-2 text-sm">
+          <span className="text-muted">Open tasks: </span>
+          <span className="font-semibold text-ink">{totalOpen}</span>
         </div>
       </div>
 
@@ -47,7 +49,7 @@ export function TaskManager() {
             <section key={priority}>
               <div className="mb-4 flex items-center gap-3">
                 <span className={cn("h-2.5 w-2.5 rounded-full", config.dot)} />
-                <h2 className="text-lg font-semibold text-white">{config.label}</h2>
+                <h2 className="text-lg font-semibold text-ink">{config.label}</h2>
                 <span
                   className={cn(
                     "rounded-full border px-2.5 py-0.5 text-xs font-medium",
@@ -63,21 +65,21 @@ export function TaskManager() {
                   <div
                     key={task.id}
                     className={cn(
-                      "flex items-start gap-4 rounded-xl border border-slate-800 bg-slate-900/50 p-4 transition hover:border-slate-700",
+                      "flex items-start gap-4 rounded-sm border border-hairline bg-surface-2 p-4 transition-transform transition-colors duration-200 ease-out focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-2 focus-within:ring-offset-surface active:scale-[0.99]",
                       priority === "critical" && "border-red-500/20"
                     )}
                   >
                     <button
                       onClick={() => toggleTaskComplete(task.id)}
-                      className="mt-0.5 shrink-0 text-slate-500 hover:text-indigo-400"
+                      className="mt-0.5 shrink-0 text-muted transition-colors duration-200 ease-out hover:text-accent"
                     >
                       <Circle className="h-5 w-5" />
                     </button>
                     <div className="min-w-0 flex-1">
-                      <p className="font-medium text-white">{task.title}</p>
-                      <p className="mt-1 text-sm text-slate-400">{task.description}</p>
+                      <p className="font-medium text-ink">{task.title}</p>
+                      <p className="mt-1 text-sm text-muted">{task.description}</p>
                       {task.dueDate && (
-                        <p className="mt-2 flex items-center gap-1.5 text-xs text-slate-500">
+                        <p className="mt-2 flex items-center gap-1.5 text-xs text-muted">
                           <Calendar className="h-3.5 w-3.5" />
                           Due {formatDate(task.dueDate)}
                         </p>
@@ -93,12 +95,12 @@ export function TaskManager() {
 
       {grouped.done.length > 0 && (
         <section>
-          <h2 className="mb-4 text-lg font-semibold text-slate-500">Completed</h2>
+          <h2 className="mb-4 text-lg font-semibold text-muted">Completed</h2>
           <div className="space-y-2">
             {grouped.done.map((task) => (
               <div
                 key={task.id}
-                className="flex items-center gap-4 rounded-lg border border-slate-800/50 bg-slate-900/30 p-3 opacity-60"
+                className="flex items-center gap-4 rounded-sm border border-hairline bg-surface-2 p-3 opacity-60"
               >
                 <button
                   onClick={() => toggleTaskComplete(task.id)}
@@ -106,7 +108,7 @@ export function TaskManager() {
                 >
                   <CheckCircle2 className="h-5 w-5" />
                 </button>
-                <p className="text-sm text-slate-400 line-through">{task.title}</p>
+                <p className="text-sm text-muted line-through">{task.title}</p>
               </div>
             ))}
           </div>

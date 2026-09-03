@@ -1,9 +1,9 @@
-# OperaOPS — Quick README (new features)
+# aeson.ai — Quick README (new features)
 
-This repository now includes the OperaOPS homepage, authentication, manual file uploads, manual mail compose, and manual calendar scheduling features.
+This repository now includes the aeson.ai homepage, authentication, manual file uploads, manual mail compose, and manual calendar scheduling features.
 
 Key pages
-- `/` — OperaOPS homepage
+- `/` — aeson.ai homepage
 - `/login` — Sign in (Google, Microsoft, Apple, Email link, demo)
 - `/dashboard` — CRM dashboard (moved under CRM layout)
 - `/uploads` — Manual file upload UI
