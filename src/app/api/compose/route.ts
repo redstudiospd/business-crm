@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireUserId } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { getValidAccessToken } from "@/lib/tokens";
 import { sendGmailMessage, createGmailDraft } from "@/lib/gmail";
 import { isDemoUserEmail } from "@/lib/seed";

@@ -19,7 +19,7 @@ diff -ruN '--exclude=node_modules' '--exclude=.next' '--exclude=.git' sim2/src/l
 +++ mod_flat/src/lib/auth.ts	2026-08-31 10:03:04.524680994 +0000
 @@ -9,6 +9,7 @@
  import type { NextAuthConfig } from "next-auth";
- import prisma from "./prisma";
+ import { prisma } from "./prisma";
  import { DEMO_USER_EMAIL, ensureDemoUser, isDemoUserEmail, seedUserData } from "./seed";
 +import { authConfig } from "./auth.config";
  

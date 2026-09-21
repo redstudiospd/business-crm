@@ -7,7 +7,7 @@ import Email from "next-auth/providers/email";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
-import prisma from "./prisma";
+import { prisma } from "./prisma";
 import { DEMO_USER_EMAIL, ensureDemoUser, isDemoUserEmail, seedUserData } from "./seed";
 import { authConfig } from "./auth.config";
 

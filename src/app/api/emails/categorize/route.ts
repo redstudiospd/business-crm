@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { Email as DBEmail } from "@prisma/client";
 import { requireUserId } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { categorizeEmail } from "@/lib/ai";
 import { mapEmail } from "@/lib/mappers";
 

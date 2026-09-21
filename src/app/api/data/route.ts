@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth, requireUserId } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { generateInsights, getDashboardSummary } from "@/lib/ai";
 import { mapChatMessage, mapEmail, mapEvent, mapTask } from "@/lib/mappers";
 import { ensureDemoUser, isDemoUserEmail } from "@/lib/seed";

@@ -1,6 +1,6 @@
 import type { Account } from "@prisma/client";
 import { google } from "googleapis";
-import prisma from "./prisma";
+import { prisma } from "./prisma";
 
 export async function refreshGoogleToken(account: Account): Promise<string | null> {
   if (!account.refresh_token) return account.access_token;

@@ -1,5 +1,5 @@
 import type { Account } from "@prisma/client";
-import prisma from "./prisma";
+import { prisma } from "./prisma";
 import { categorizeEmail } from "./ai";
 import type { EmailCategory } from "./types";
 

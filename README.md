@@ -22,7 +22,7 @@ For local development, open http://localhost:3000.
 
 For production deployments, set `NEXTAUTH_URL` (and `AUTH_URL` if used) to your public app URL, e.g. https://app.example.com.
 
-## Optional: OpenAI Integration
+## Optional: Anthropic API Integration
 
 Set `ANTHROPIC_API_KEY` in `.env.local` to enable Sonnet5-powered chat responses. Without it, the built-in rule-based AI handles all features.
 

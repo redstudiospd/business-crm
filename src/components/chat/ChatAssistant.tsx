@@ -20,6 +20,7 @@ export function ChatAssistant() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    // oxlint-disable-next-line react/exhaustive-effect-dependencies
   }, [chatMessages]);
 
   const sendMessage = async (text: string) => {
