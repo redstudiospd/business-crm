@@ -7,7 +7,8 @@
     "build": "prisma generate && next build",
     "postinstall": "prisma generate",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "oxlint && eslint",
+    "lint:fix": "oxlint --fix",
     "seed:demo": "node scripts/seed-demo.js"
   },
   "dependencies": {
@@ -38,6 +39,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
+    "eslint-plugin-oxlint": "^1.84.0",
+    "oxlint": "^1.84.0",
     "prisma": "^7.9.1",
     "tailwindcss": "^4",
     "typescript": "^5"

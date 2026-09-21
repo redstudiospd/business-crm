@@ -15,7 +15,16 @@ export default function LoginPage() {
 
   const handleProviderSignIn = async (id: string) => {
     setStatus(null);
-    await signIn(id, { callbackUrl: "/dashboard" });
+    await signIn(id, { callbackUrl: "/dashboard" })
+  }
+
+  const handleDemoSignIn = async () => {
+    setStatus("Signing in to demo...");
+    await signIn("credentials", {
+      email: "demo@aesonops.local",
+      password: "demo1234",
+      callbackUrl: "/dashboard"
+    });
   };
 
   const handleEmailSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -54,6 +63,14 @@ export default function LoginPage() {
           </button>
         ))}
       </div>
+
+      <button
+        type="button"
+        onClick={handleDemoSignIn}
+        className="w-full rounded-sm bg-accent px-4 py-3 text-sm font-semibold text-ink transition-colors duration-200 ease-out hover:bg-accent-hover"
+      >
+        Try demo account
+      </button>
 
       <form onSubmit={handleEmailSignIn} className="space-y-4">
         <label className="block text-sm font-medium text-ink">

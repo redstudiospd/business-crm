@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireUserId } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { categorizeEmail } from "@/lib/ai";
 import { mapEmail } from "@/lib/mappers";
 
 export async function PATCH(

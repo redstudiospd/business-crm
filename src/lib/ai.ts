@@ -1,5 +1,5 @@
 import type { Email, EmailCategory, BusinessInsight, MonthlyFinance } from "./types";
-import { lossReasons, monthlyFinances } from "./data";
+import { lossReasons } from "./data";
 
 const spamPatterns = [
   /won.*\$|claim now|lottery|click here|90% off|limited time/i,

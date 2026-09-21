@@ -7,7 +7,7 @@ import {
   monthlyFinances,
 } from "./data";
 
-export const DEMO_USER_EMAIL = process.env.DEMO_USER_EMAIL ?? "demo@operaops.local";
+export const DEMO_USER_EMAIL = process.env.DEMO_USER_EMAIL ?? "demo@aesonops.local";
 
 export function isDemoUserEmail(email?: string | null): boolean {
   return !!email && email.toLowerCase() === DEMO_USER_EMAIL.toLowerCase();
@@ -25,51 +25,32 @@ export async function seedUserData(userId: string) {
   if (existing > 0) return;
 
   await prisma.$transaction([
-    ...monthlyFinances.map((f) =>
-      prisma.monthlyFinance.create({
-        data: { userId, month: f.month, revenue: f.revenue, expenses: f.expenses },
-      })
-    ),
-    ...initialEmails.map((e) =>
-      prisma.email.create({
-        data: {
-          userId,
-          from: e.from,
-          subject: e.subject,
-          preview: e.preview,
-          body: e.body,
-          receivedAt: new Date(e.receivedAt),
-          category: e.category,
-          read: e.read,
-        },
-      })
-    ),
-    ...initialTasks.map((t) =>
-      prisma.task.create({
-        data: {
-          userId,
-          title: t.title,
-          description: t.description,
-          priority: t.priority,
-          dueDate: t.dueDate ? new Date(t.dueDate) : null,
-          completed: t.completed,
-          sourceEmailId: t.sourceEmailId,
-        },
-      })
-    ),
-    ...initialEvents.map((e) =>
-      prisma.calendarEvent.create({
-        data: {
-          userId,
-          title: e.title,
-          description: e.description,
-          start: new Date(e.start),
-          end: new Date(e.end),
-          type: e.type,
-          sourceEmailId: e.sourceEmailId,
-        },
-      })
-    ),
+    prisma.monthlyFinance.createMany({
+      data: monthlyFinances.map((f) => ({
+        userId, month: f.month, revenue: f.revenue, expenses: f.expenses,
+      })),
+    }),
+    prisma.email.createMany({
+      data: initialEmails.map((e) => ({
+        userId, from: e.from, subject: e.subject, preview: e.preview,
+        body: e.body, receivedAt: new Date(e.receivedAt),
+        category: e.category, read: e.read,
+      })),
+    }),
+    prisma.task.createMany({
+      data: initialTasks.map((t) => ({
+        userId, title: t.title, description: t.description,
+        priority: t.priority, dueDate: t.dueDate ? new Date(t.dueDate) : null,
+        completed: t.completed, sourceEmailId: t.sourceEmailId,
+      })),
+    }),
+    prisma.calendarEvent.createMany({
+      data: initialEvents.map((e) => ({
+        userId, title: e.title, description: e.description,
+        start: new Date(e.start), end: new Date(e.end),
+        type: e.type, sourceEmailId: e.sourceEmailId,
+      })),
+    }),
     prisma.chatMessage.create({
       data: {
         userId,
@@ -82,10 +63,13 @@ export async function seedUserData(userId: string) {
 }
 
 export async function ensureDemoUser() {
-  if (process.env.DEMO_LOGIN !== "true") return;
+  
 
   const existing = await prisma.user.findUnique({ where: { email: DEMO_USER_EMAIL } });
-  if (existing) return;
+  if (existing) {
+    await seedUserData(existing.id);
+    return;
+  };
 
   const passwordHash = await bcrypt.hash("demo1234", 10);
   const user = await prisma.user.create({
