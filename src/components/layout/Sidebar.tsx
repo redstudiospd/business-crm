@@ -120,14 +120,14 @@ export function Sidebar() {
               onClick={() => signOut({ callbackUrl: "/login" })}
               disabled={isLoading}
               className={cn(
-                "sidebar-action inline-flex items-center justify-center gap-2 rounded-sm border px-3 py-2 text-xs font-medium transition-transform transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface active:scale-[0.98]",
+                "sidebar-action inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border px-3 py-2 text-xs font-medium transition-transform transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface active:scale-[0.98]",
                 isLoading
                   ? "cursor-not-allowed border-hairline bg-surface-3 text-muted"
                   : "border-red-500/30 bg-red-500/10 text-red-200"
               )}
             >
               <LogOut className="h-3.5 w-3.5" />
-              Logout
+              Sign out
             </button>
           </div>
         </div>
