@@ -3,6 +3,8 @@ import { requireUserId } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { isDemoUserEmail } from "@/lib/seed";
 
+// User ID function
+
 export async function POST(request: Request) {
   try {
     const userId = await requireUserId();
