@@ -18,6 +18,11 @@ const PROTECTED_PREFIXES = [
 
 export default auth((req) => {
   const { nextUrl } = req;
+
+  if (nextUrl.pathname === "/login" && req.auth?.user) {
+    return NextResponse.redirect(new URL("/dashboard", nextUrl.origin));
+  }
+
   const isProtected = PROTECTED_PREFIXES.some(
     (prefix) => nextUrl.pathname === prefix || nextUrl.pathname.startsWith(`${prefix}/`)
   );
@@ -33,6 +38,7 @@ export default auth((req) => {
 
 export const config = {
   matcher: [
+    "/login",
     "/dashboard/:path*",
     "/emails/:path*",
     "/calendar/:path*",

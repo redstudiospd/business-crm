@@ -13,7 +13,7 @@ export async function POST(request: Request) {
 
     if (currentUser && isDemoUserEmail(currentUser.email)) {
       return NextResponse.json(
-        { error: "The demo account is shared and read-only, so files can't be uploaded here. Sign in with Google, Microsoft, or Apple to upload your own files." },
+        { error: "The demo account is shared and read-only, so files can't be uploaded here. Sign in with Google or Microsoft to upload your own files." },
         { status: 403 }
       );
     }

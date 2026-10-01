@@ -4,7 +4,7 @@ This repository now includes the aeson.ai homepage, authentication, manual file 
 
 Key pages
 - `/` — aeson.ai homepage
-- `/login` — Sign in (Google, Microsoft, Apple, Email link, demo)
+- `/login` — Sign in (Google, Microsoft, Email link, demo)
 - `/dashboard` — CRM dashboard (moved under CRM layout)
 - `/uploads` — Manual file upload UI
 - `/emails/compose` — Compose and save drafts
@@ -20,7 +20,6 @@ Important environment variables
 - `DATABASE_URL` — SQLite (or libSQL/Turso) connection string
 - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
 - `AZURE_AD_CLIENT_ID`, `AZURE_AD_CLIENT_SECRET`, `AZURE_AD_TENANT_ID` (optional)
-- `APPLE_CLIENT_ID`, `APPLE_CLIENT_SECRET` (optional)
 - `EMAIL_SERVER_HOST`, `EMAIL_SERVER_PORT`, `EMAIL_SERVER_USER`, `EMAIL_SERVER_PASSWORD`, `EMAIL_FROM` — for Email sign-in
 - `DEMO_LOGIN=true` — enable seeded demo user
 

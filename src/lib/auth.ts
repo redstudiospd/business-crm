@@ -2,7 +2,6 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Google from "next-auth/providers/google";
 import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
-import Apple from "next-auth/providers/apple";
 import Email from "next-auth/providers/email";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -48,14 +47,6 @@ if (process.env.AZURE_AD_CLIENT_ID && process.env.AZURE_AD_CLIENT_SECRET) {
   );
 }
 
-if (process.env.APPLE_CLIENT_ID && process.env.APPLE_CLIENT_SECRET) {
-  providers.push(
-    Apple({
-      clientId: process.env.APPLE_CLIENT_ID,
-      clientSecret: process.env.APPLE_CLIENT_SECRET,
-    })
-  );
-}
 
 if (
   process.env.EMAIL_SERVER_HOST &&
@@ -126,6 +117,14 @@ export const fullAuthConfig: NextAuthConfig = {
     },
     signIn: async ({ user, account }) => {
       if (!user?.email) return false;
+
+      // Block linking/sign-in as a different account while a session is active
+      const current = await auth();
+      const currentEmail = current?.user?.email?.toLowerCase();
+      if (currentEmail && currentEmail !== user.email.toLowerCase()) {
+        return "/dashboard"; // abort, link nothing
+      }
+
       if (isDemoUserEmail(user.email)) {
         return account?.provider === "credentials";
       }

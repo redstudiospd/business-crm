@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
   if (currentUser && isDemoUserEmail(currentUser.email)) {
     return NextResponse.json(
-      { error: "The demo account is shared and read-only, so new events can't be saved. Sign in with Google, Microsoft, or Apple to create real events." },
+      { error: "The demo account is shared and read-only, so new events can't be saved. Sign in with Google or Microsoft to create real events." },
       { status: 403 }
     );
   }
