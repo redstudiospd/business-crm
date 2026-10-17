@@ -20,7 +20,7 @@ npm run dev
 
 For local development, open http://localhost:3000.
 
-For production deployments, set `NEXTAUTH_URL` (and `AUTH_URL` if used) to your public app URL, e.g. https://aesonai.vercel.app
+For production deployments, set `NEXTAUTH_URL` (and `AUTH_URL` if used) to your public app URL, e.g. https://aeson-ai.vercel.app
 
 ## Optional: Anthropic API Integration
 
