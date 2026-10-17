@@ -20,7 +20,7 @@ npm run dev
 
 For local development, open http://localhost:3000.
 
-For production deployments, set `NEXTAUTH_URL` (and `AUTH_URL` if used) to your public app URL, e.g. https://app.example.com.
+For production deployments, set `NEXTAUTH_URL` (and `AUTH_URL` if used) to your public app URL, e.g. https://aesonai-vercel.app
 
 ## Optional: Anthropic API Integration
 
@@ -36,6 +36,9 @@ ANTHROPIC_API_KEY=sk-...
 - React 19
 - Tailwind CSS 4
 - Recharts
+- neondb
+- prisma
+- vercel
 - Lucide Icons
 
 ## Project Structure
